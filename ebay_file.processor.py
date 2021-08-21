@@ -1,5 +1,5 @@
 #
-# Copyright 2019 Fatih Atalay
+# Copyright 2020 Fatih Atalay
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy
@@ -14,9 +14,11 @@
 # under the License.
 #
 
+
+
 import pandas as pd
 
-sales = pd.read_csv("C:\\Users\\atala\\Downloads\\eBayOrdersReport2.csv",skiprows=range(1))
+sales = pd.read_csv("C:\\Users\\atala\\Downloads\\eBayOrdersReport.csv",skiprows=range(1))
 
 
 #drop the first empty line
@@ -96,6 +98,9 @@ for i in range(1, sales.shape[0]+1):
                 sales.loc[j, 'Custom Label']=""
         sales.loc[i, 'Custom Label'] = cart
         print (cart)
+        
+#drop the multiple order identifier column
+sales = sales.drop('mult_order',1)
 
 
 sales.to_csv("C:\\Users\\atala\\Downloads\\eBayOrdersprocessed.csv", index=False)
