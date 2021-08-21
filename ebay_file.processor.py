@@ -98,9 +98,10 @@ for i in range(1, sales.shape[0]+1):
                 sales.loc[j, 'Custom Label']=""
         sales.loc[i, 'Custom Label'] = cart
         print (cart)
-        
+
 #drop the multiple order identifier column
-sales = sales.drop('mult_order',1)
+
+sales.drop('mult_order',1, inplace=True)
 
 
 sales.to_csv("C:\\Users\\atala\\Downloads\\eBayOrdersprocessed.csv", index=False)
