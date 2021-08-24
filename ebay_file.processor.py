@@ -27,15 +27,19 @@ sales=sales.drop(sales.index[0])
 sales=sales.drop(sales.index[[-1,-2,-3]])
 
 
-print(list(sales.columns) )
 
 # 1 - Prefixing Quantity in the Custom Label Column
 # Change column quantity from float>int>str.
 sales['Quantity'] = sales['Quantity'].astype(int).astype(str)
 # Prefixing Qty in the CustomLabel Column
-for index, row in sales.iterrows():
-   if (row['Quantity'] != '1' and row['Custom Label'] != ''):
-       row['Custom Label'] = str(row['Quantity']) + 'x ' + str(row['Custom Label'])
+
+for i in range(1, sales.shape[0] + 1):
+    if  pd.isnull(sales.loc[i, 'Custom Label'])    :
+        pass
+    elif sales.loc[i,'Quantity'] != '1':
+
+        sales.loc[i,'Custom Label'] = str(sales.loc[i,'Quantity']) + 'x ' + str(sales.loc[i,'Custom Label'])
+
 
 
 # 2 - Combine Mutiple Item Purchases (within same order)
@@ -58,7 +62,7 @@ while i < sales.shape[0]-1:
             j += 1
             i = j
         sales.loc[k+1, 'Custom Label'] = cart
-        print(cart)
+       
     i += 1
 
 
@@ -97,7 +101,7 @@ for i in range(1, sales.shape[0]+1):
                     cart = "* " + sales.loc[j, 'Custom Label'] + cart
                 sales.loc[j, 'Custom Label']=""
         sales.loc[i, 'Custom Label'] = cart
-        print (cart)
+
 
 #drop the multiple order identifier column
 
