@@ -17,8 +17,18 @@
 
 
 import pandas as pd
+import glob
+import os
 
-sales = pd.read_csv("C:\\Users\\atala\\Downloads\\eBayOrdersReport.csv",skiprows=range(1))
+
+
+# get the latest downloaded ebay sales report
+
+list_of_files = glob.glob('C:\\Users\\atala\\Downloads\\eBay-OrdersReport*.csv')
+latest_ebay_oders = max(list_of_files, key=os.path.getctime)
+
+sales = pd.read_csv(latest_ebay_oders ,skiprows=range(1))
+
 
 
 #drop the first empty line
@@ -28,10 +38,12 @@ sales=sales.drop(sales.index[[-1,-2,-3]])
 
 
 
+
 # 1 - Prefixing Quantity in the Custom Label Column
 # Change column quantity from float>int>str.
 sales['Quantity'] = sales['Quantity'].astype(int).astype(str)
 # Prefixing Qty in the CustomLabel Column
+
 
 for i in range(1, sales.shape[0] + 1):
     if  pd.isnull(sales.loc[i, 'Custom Label'])    :
@@ -62,7 +74,7 @@ while i < sales.shape[0]-1:
             j += 1
             i = j
         sales.loc[k+1, 'Custom Label'] = cart
-       
+
     i += 1
 
 
