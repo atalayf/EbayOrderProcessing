@@ -27,6 +27,8 @@ import os
 list_of_files = glob.glob('C:\\Users\\atala\\Downloads\\eBay-OrdersReport*.csv')
 latest_ebay_oders = max(list_of_files, key=os.path.getctime)
 
+
+# read sales report into pandas dataframe
 sales = pd.read_csv(latest_ebay_oders ,skiprows=range(1))
 
 
@@ -68,6 +70,7 @@ while i < sales.shape[0]-1:
                 pass
             elif cart.startswith("*"):
                 cart = cart + " + " + sales.loc[j + 1, 'Custom Label']
+                sales.loc[j + 1, 'Custom Label'] = ""
             else:
                 cart = "* " + sales.loc[j+1, 'Custom Label'] + cart
                 sales.loc[j+1, 'Custom Label'] = ""
