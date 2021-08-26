@@ -19,6 +19,7 @@
 import pandas as pd
 import glob
 import os
+from datetime import date
 
 
 
@@ -122,5 +123,6 @@ for i in range(1, sales.shape[0]+1):
 
 sales.drop('mult_order',1, inplace=True)
 
+today = date.today()
 
-sales.to_csv("C:\\Users\\atala\\Downloads\\eBayOrdersprocessed.csv", index=False)
+sales.to_csv(f"C:\\Users\\atala\\Downloads\\eBayOrdersprocessed{today}.csv", index=False)
