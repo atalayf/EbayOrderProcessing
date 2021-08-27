@@ -18,13 +18,13 @@ import glob
 import os
 from datetime import date
 
-# Get the latest downloaded ebay sales report (We read the whole report since they are less than 200K for the amount 
+# Get the latest downloaded ebay sales report (We read the whole report since they are less than 200K for the amount
 # of orders we process.)
 list_of_files = glob.glob('C:\\Users\\atala\\Downloads\\eBay-OrdersReport*.csv')
 latest_ebay_oders = max(list_of_files, key=os.path.getctime)
 
-# Read sales report into pandas dataframe. 
-sales = pd.read_csv(latest_ebay_oders ,skiprows=range(1))
+# Read sales report into pandas dataframe.
+sales = pd.read_csv(latest_ebay_oders, skiprows=range(1))
 
 # Drop the first empty line
 sales=sales.drop(sales.index[0])
@@ -36,8 +36,8 @@ sales=sales.drop(sales.index[[-1,-2,-3]])
 sales['Quantity'] = sales['Quantity'].astype(int).astype(str)
 
 for i in range(1, sales.shape[0] + 1):
-    if  pd.isnull(sales.loc[i, 'Custom Label'])    :
-        pass
+    if  pd.isnull(sales.loc[i, 'Custom Label']):
+        continue
     elif sales.loc[i,'Quantity'] != '1':
         sales.loc[i,'Custom Label'] = str(sales.loc[i,'Quantity']) + 'x ' + str(sales.loc[i,'Custom Label'])
 
@@ -69,12 +69,12 @@ while i < sales.shape[0]-1:
 # add a column to identify multiple orders from the same buyer that ships to the same address.
 sales['mult_order'] = 0
 
-for i in range(2, sales.shape[0]+1):
+for i in range(1, sales.shape[0]+1):
     for j in range(i+1, sales.shape[0]+1):
         if sales.loc[i, 'mult_order'] != 0:
             pass
-        elif (sales.loc[i,'Buyer Username'] == sales.loc[j, 'Buyer Username'] )and \
-                (sales.loc[i, 'Ship To Address 1'] == sales.loc[j, 'Ship To Address 1']):
+        elif (sales.loc[i,'Buyer Username'] == sales.loc[j, 'Buyer Username']) \
+                and (sales.loc[i, 'Ship To Address 1'] == sales.loc[j, 'Ship To Address 1']):
             sales.loc[i, 'mult_order'] = i
             sales.loc[j, 'mult_order'] = i
 
@@ -95,4 +95,4 @@ sales.drop('mult_order',1, inplace=True)
 
 today = date.today()
 
-sales.to_csv(f"C:\\Users\\atala\\Downloads\\eBayOrdersprocessed{today}.csv", index=False)
+sales.to_csv(f"C:\\Users\\atala\\Downloads\\eBayOrdersprocessed-{today}.csv", index=False)
