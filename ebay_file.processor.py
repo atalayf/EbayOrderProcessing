@@ -1,18 +1,3 @@
-#
-# Copyright 2020 Fatih Atalay
-#
-# Licensed under the Apache License, Version 2.0 (the "License"); you may not
-# use this file except in compliance with the License. You may obtain a copy
-# of the License at:
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations
-# under the License.
-
 import pandas as pd
 import glob
 import os
@@ -20,10 +5,11 @@ from datetime import date
 
 # Get the latest downloaded ebay sales report (We read the whole report since they are far less than 200K for the amount
 # of orders we process.)
+
 list_of_files = glob.glob('C:\\Users\\atala\\Downloads\\eBay-OrdersReport*.csv')
 latest_ebay_oders = max(list_of_files, key=os.path.getctime)
 
-# Read sales report into pandas dataframe.
+# Read the ebay sales report
 sales = pd.read_csv(latest_ebay_oders, skiprows=range(1))
 
 # Drop the first empty line
@@ -95,4 +81,5 @@ sales.drop('mult_order',1, inplace=True)
 
 today = date.today()
 
+# Save the sales report to a csv file
 sales.to_csv(f"C:\\Users\\atala\\Downloads\\eBayOrdersprocessed-{today}.csv", index=False)
