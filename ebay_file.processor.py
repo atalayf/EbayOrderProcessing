@@ -18,7 +18,7 @@ import glob
 import os
 from datetime import date
 
-# Get the latest downloaded ebay sales report (We read the whole report since they are less than 200K for the amount
+# Get the latest downloaded ebay sales report (We read the whole report since they are far less than 200K for the amount
 # of orders we process.)
 list_of_files = glob.glob('C:\\Users\\atala\\Downloads\\eBay-OrdersReport*.csv')
 latest_ebay_oders = max(list_of_files, key=os.path.getctime)
