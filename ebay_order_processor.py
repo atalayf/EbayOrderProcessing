@@ -1,11 +1,9 @@
-
 import pandas as pd
 import glob
 import os
 from datetime import date
 
-# Get the latest downloaded ebay sales report (We read the whole report since they are far less than 200K for the amount
-# of orders we process.)
+# Get the latest downloaded ebay sales report 
 
 list_of_files = glob.glob('C:\\Users\\atala\\Downloads\\eBay-OrdersReport*.csv')
 latest_ebay_oders = max(list_of_files, key=os.path.getctime)
@@ -13,13 +11,13 @@ latest_ebay_oders = max(list_of_files, key=os.path.getctime)
 # Read the ebay sales report
 sales = pd.read_csv(latest_ebay_oders, skiprows=range(1))
 
-# Drop the first empty line
+# Drop the first blank line
 sales=sales.drop(sales.index[0])
 # Drop last 3 lines which are not orders
 sales=sales.drop(sales.index[[-1,-2,-3]])
 
 # 1 - Prefixing Quantity in the Custom Label Column
-# Change column quantity from float>int>str.
+# Remove the decimal point from the quantity
 sales['Quantity'] = sales['Quantity'].astype(int).astype(str)
 
 for i in range(1, sales.shape[0] + 1):
@@ -54,6 +52,7 @@ while i < sales.shape[0]-1:
 
 # 3 - Combine Mutiple orders from same buyer.
 # add a column to identify multiple orders from the same buyer that ships to the same address.
+
 sales['mult_order'] = 0
 
 for i in range(1, sales.shape[0]+1):
@@ -65,6 +64,7 @@ for i in range(1, sales.shape[0]+1):
             sales.loc[i, 'mult_order'] = i
             sales.loc[j, 'mult_order'] = i
 
+# 4 - Combine Mutiple orders from same buyer.
 for i in range(1, sales.shape[0]+1):
     if sales.loc[i, 'mult_order'] >= i:
         cart=""
@@ -77,7 +77,7 @@ for i in range(1, sales.shape[0]+1):
                 sales.loc[j, 'Custom Label']=""
         sales.loc[i, 'Custom Label'] = cart
 
-#drop the multiple order identifier column
+# Drop the multiple order identifier column
 sales.drop('mult_order',1, inplace=True)
 
 today = date.today()
